@@ -4,8 +4,14 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Builder;
+
+/**
+ * @mixin Builder
+ */
 
 class User extends Authenticatable
 {
@@ -19,7 +25,10 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'avatar',
         'password',
+        'email_verified_at',
+        'is_admin',
     ];
 
     /**
@@ -43,5 +52,11 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function groups(): BelongsToMany
+    {
+//        return $this->belongsToMany(Group::class, 'group_user', 'user_id', 'group_id');
+        return $this->belongsToMany(Group::class, 'group_user');
     }
 }
