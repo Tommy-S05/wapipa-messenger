@@ -115,4 +115,14 @@ return [
     'user'            => 'Usuario',
     'view'            => 'Ver',
     'yes'             => 'Sí',
+
+    //Sidebar translations
+    'my_conversations' => 'Mis Conversaciones',
+    'create_new_user' => 'Crear Nuevo Usuario',
+    'create_conversation' => 'Crear Conversación',
+    'create_group' => 'Crear Grupo',
+    'block_user' => 'Bloquear Usuario',
+    'unblock_user' => 'Desbloquear Usuario',
+    'make_admin' => 'Hacer Administrador',
+    'remove_admin' => 'Eliminar Administrador',
 ];

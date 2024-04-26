@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Conversation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -34,6 +36,16 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            'conversations' => Auth::id() ? Conversation::getConversationsForSideBar($request->user()) : [],
+
+            //Archivos de Traducciones
+            'translations_actions' => __('actions'),
+            'translations_auth' => __('auth'),
+            'translations_http_statuses' => __('http_statuses'),
+            'translations_messages' => __('messages'),
+            'translations_pagination' => __('pagination'),
+            'translations_passwords' => __('passwords'),
+            'translations_validation' => __('validation'),
         ];
     }
 }

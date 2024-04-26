@@ -115,4 +115,13 @@ return [
     'user'            => 'User',
     'view'            => 'View',
     'yes'             => 'Yes',
+
+    //Sidebar translations
+    'create_new_user' => 'Create New User',
+    'create_conversation' => 'Create Conversation',
+    'create_group' => 'Create Group',
+    'block_user' => 'Block User',
+    'unblock_user' => 'Unblock User',
+    'make_admin' => 'Make Admin',
+    'remove_admin' => 'Remove Admin',
 ];

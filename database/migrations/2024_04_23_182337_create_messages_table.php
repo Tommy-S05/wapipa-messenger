@@ -22,11 +22,11 @@ return new class extends Migration
         });
 
         Schema::table('groups', function (Blueprint $table) {
-            $table->foreignId('last_message_id')->nullable()->constrained('messages');
+            $table->foreignId('last_message_id')->after('owner_id')->nullable()->constrained('messages');
         });
 
         Schema::table('conversations', function (Blueprint $table) {
-            $table->foreignId('last_message_id')->nullable()->constrained('messages');
+            $table->foreignId('last_message_id')->after('user_id2')->nullable()->constrained('messages');
         });
     }
 
