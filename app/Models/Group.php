@@ -70,10 +70,26 @@ class Group extends Model
             'owner_id' => $this->owner_id,
             'users' => $this->users,
             'users_ids' => $this->users->pluck('id'),
-            'created_at' => $this->created_at->format('d-m-Y H:i:s'),
-            'updated_at' => $this->updated_at->format('d-m-Y H:i:s'),
+//            'created_at' => $this->created_at->format('d-m-Y H:i:s'),
+            'created_at' => $this->created_at,
+//            'updated_at' => $this->updated_at->format('d-m-Y H:i:s'),
+            'updated_at' => $this->updated_at,
             'last_message' => $this->last_message,
-            'last_message_date' => $formattedLastMessageDate
+            'last_message_date' => $this->last_message_date
         ];
+    }
+
+    public function updateGroupWithMessage($groupId, $message)
+    {
+        //        $group = self::find($groupId);
+        //        $group->update([
+        //            'last_message_id' => $message->id
+        //        ]);
+
+        // Create or update the group with the received group id and last message
+        return self::updateOrCreate(
+            ['id' => $groupId], // search condition
+            ['last_message_id' => $message->id] // values to update
+        );
     }
 }

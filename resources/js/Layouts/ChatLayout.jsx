@@ -17,17 +17,17 @@ const ChatLayout = ({children}) => {
 
     const isUserOnline = (userId) => onlineUsers[userId];
 
-    console.log(conversations);
+    // console.log(conversations);
 
     const onSearch = (e) => {
-        const search = e.target.value.toLowerCase();
+        let search = e.target.value;
         const filteredConversations = conversations.filter((conversation) => {
             if (conversation.is_group) {
                 return conversation.name.toLowerCase().includes(search);
             } else {
                 return (
                     conversation.name.toLowerCase().includes(search) ||
-                    conversation.email.toLowerCase().includes(search)
+                    conversation.email?.toLowerCase().includes(search)
                 );
             }
         });
@@ -124,7 +124,7 @@ const ChatLayout = ({children}) => {
                     {/*Search*/}
                     <div className={'p-3'}>
                         <TextInput
-                            // onKeyUp={onSearch}
+                            onKeyUp={onSearch}
                             placeholder={trans(translations_actions.search)}
                             className={'w-full'}
                         />

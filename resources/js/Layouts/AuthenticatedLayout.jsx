@@ -1,16 +1,65 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import {Link, usePage} from '@inertiajs/react';
 import {trans} from "@/helpers.js";
+import {useEventBus} from "@/EventBus.jsx";
 
-export default function Authenticated({ header, children }) {
+export default function Authenticated({header, children}) {
     const page = usePage();
     const user = page.props.auth.user;
-    const {translations_messages} = page.props;
+    const {conversations, translations_messages} = page.props;
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+    const {emit} = useEventBus();
+
+    useEffect(() => {
+        conversations.forEach((conversation) => {
+            let channel = `messages.group.${conversation.id}`;
+
+            if (conversation.is_user) {
+                channel = `messages.user.${[parseInt(user.id), parseInt(conversation.id)]
+                    .sort((a, b) => a - b)
+                    .join('-')}`;
+            }
+
+            Echo.private(channel)
+                .error((error) => {
+                    console.error(error);
+                })
+                .listen('SocketMessage', (e) => {
+                    console.log('SocketMessage', e);
+                    const message = e.message;
+
+                    emit('message.created', message);
+
+                    if (message.sender_id === user.id) {
+                        return;
+                    }
+
+                    emit('newMessageNotification', {
+                        user: message.sender,
+                        group_id: message.group_id,
+                        // message: message.message || `Shared ${message.files.length} file(s)`,
+                        message: message.message || `Shared ${message.attachments.length === 1 ? 'an attachment' : message.attachments.length + ' attachments'}`,
+                    });
+                });
+        });
+
+        return () => {
+            conversations.forEach((conversation) => {
+                let channel = `message.group.${conversation.id}`;
+
+                if (conversation.is_user) {
+                    channel = `message.user.${[parseInt(user.id), parseInt(conversation.id)]
+                        .sort((a, b) => a - b)
+                        .join('-')}`;
+                }
+                Echo.leave(channel);
+            });
+        }
+    }, [conversations]);
 
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900 h-screen flex flex-col">
@@ -20,7 +69,8 @@ export default function Authenticated({ header, children }) {
                         <div className="flex">
                             <div className="shrink-0 flex items-center">
                                 <Link href="/">
-                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                                    <ApplicationLogo
+                                        className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200"/>
                                 </Link>
                             </div>
 

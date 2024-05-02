@@ -106,12 +106,14 @@ class User extends Authenticatable
             'is_group' => false,
             'is_user' => true,
             'is_admin' => (bool) $this->is_admin,
-            'created_at' => $this->created_at->format('d-m-Y H:i:s'),
-            'updated_at' => $this->updated_at->format('d-m-Y H:i:s'),
+//            'created_at' => $this->created_at->format('d-m-Y H:i:s'),
+            'created_at' => $this->created_at,
+//            'updated_at' => $this->updated_at->format('d-m-Y H:i:s'),
+            'updated_at' => $this->updated_at,
             'blocked_at' => $this->blocked_at,
 //            'last_online' => $this->last_online,
             'last_message' => $this->last_message,
-            'last_message_date' => $formattedLastMessageDate
+            'last_message_date' => $this->last_message_date
         ];
     }
 }
